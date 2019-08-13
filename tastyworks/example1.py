@@ -26,7 +26,7 @@ async def main_loop(session: TastyAPISession, streamer: DataStreamer):
     #     ]
     # }
     sub_values = {
-        "Quote": ["JBHT"]
+        "Quote": ["/ES"]
     }
 
     accounts = await TradingAccount.get_remote_accounts(session)
@@ -52,10 +52,10 @@ async def main_loop(session: TastyAPISession, streamer: DataStreamer):
         option_type=OptionType.CALL,
         underlying_type=UnderlyingType.EQUITY
     )
-    # new_order.add_leg(opt)
+    new_order.add_leg(opt)
 
-    # res = await acct.execute_order(new_order, session, dry_run=True)
-    # LOGGER.info('Order executed successfully: %s', res)
+    res = await acct.execute_order(new_order, session, dry_run=True)
+    LOGGER.info('Order executed successfully: %s', res)
 
     # Get an options chain
     undl = underlying.Underlying('AKS')
@@ -83,7 +83,7 @@ def get_third_friday(d):
 
 
 def main():
-    tasty_client = tasty_session.create_new_session(environ.get('TASTY_USERNAME', ""), environ.get('TASTY_PASSWORD', ""))
+    tasty_client = tasty_session.create_new_session(environ.get('TW_USER', ""), environ.get('TW_PASSWORD', ""))
 
     streamer = DataStreamer(tasty_client)
     LOGGER.info('Streamer token: %s' % streamer.get_streamer_token())
